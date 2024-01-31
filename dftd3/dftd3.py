@@ -248,11 +248,10 @@ c6ab = copyc6(max_elem, maxc)
 
 ## The computation of the D3 dispersion correction
 class calcD3:
-   def __init__(self, fileData, functional, damp='zero', s6=0.0, rs6=0.0, s8=0.0, a1=0.0, a2=0.0, abc=False, intermolecular=False, pairwise=False, verbose=False):
-
-      atom_nums = fileData.atomnos.tolist()
+   def __init__(self, fileData, functional, damp='zero', s6=0.0, rs6=0.0, s8=0.0, a1=0.0, a2=0.0, abc=False, intermolecular=False, pairwise=False, verbose=True):
+      atom_nums = fileData.atom_nums
       atomtype = [periodictable[atno] for atno in atom_nums]
-      cartesians = fileData.atomcoords[-1].tolist()
+      cartesians = fileData.cartesians
       natom = len(atomtype)
 
       xco=[]; yco=[]; zco=[]
@@ -390,7 +389,8 @@ class calcD3:
                   self.attractive_r6_term = -s6*C6jk/(math.pow(dist,6)+damp6)*autokcal*scalefactor
                   self.attractive_r8_term = -s8*C8jk/(math.pow(dist,8)+damp8)*autokcal*scalefactor
 
-               if pairwise == True and scalefactor != 0: print("   --- Pairwise interaction between atoms", (j+1), "and", (k+1),": Edisp =", "%.6f" % (self.attractive_r6_term + self.attractive_r8_term), "kcal/mol")
+               if pairwise == True and scalefactor != 0: 
+                  print("   --- Pairwise interaction between atoms", (j+1), "and", (k+1),": Edisp =", "%.6f" % (self.attractive_r6_term + self.attractive_r8_term), "kcal/mol")
 
                self.attractive_r6_vdw = self.attractive_r6_vdw + self.attractive_r6_term
                self.attractive_r8_vdw = self.attractive_r8_vdw + self.attractive_r8_term
@@ -500,3 +500,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
