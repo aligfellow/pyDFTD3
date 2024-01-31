@@ -394,7 +394,7 @@ class calcD3:
 
                self.attractive_r6_vdw = self.attractive_r6_vdw + self.attractive_r6_term
                self.attractive_r8_vdw = self.attractive_r8_vdw + self.attractive_r8_term
-               print("   --- Total attractive interaction between atoms", (j+1), "and", (k+1),": Edisp =", "%.6f" % (self.attractive_r6_term + self.attractive_r8_term), "kcal/mol")
+               # print("   --- Total attractive interaction between atoms", (j+1), "and", (k+1),": Edisp =", "%.6f" % (self.attractive_r6_term + self.attractive_r8_term), "kcal/mol")
 
                jk=int(lin(k,j))
                icomp[jk] = 1
@@ -431,7 +431,7 @@ class calcD3:
       
       self.repulsive_abc_term = s6 * e63 * autokcal
       self.repulsive_abc = self.repulsive_abc + self.repulsive_abc_term
-      print("   --- Total 3-body interaction: E3body =", "%.6f" % self.repulsive_abc_term, "kcal/mol")
+      # print("   --- Total 3-body interaction: E3body =", "%.6f" % self.repulsive_abc_term, "kcal/mol")
 
 def main():
     parser = ArgumentParser()
