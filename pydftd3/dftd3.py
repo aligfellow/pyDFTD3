@@ -275,8 +275,8 @@ class calcD3:
       cn = ncoord(natom, rcov, atomtype, xco, yco, zco, max_elem, autoang, k1, k2)
 
       ## C6 - Need to calculate these from fractional coordination
-      #print "\n           R0(Ang)        CN"
-      #print "   #########################"
+      # print("\n           R0(Ang)        CN")
+      # print("   #########################")
       x=0
       for j in range(0,natom):
          C6jj = getc6(maxc,max_elem,c6ab,mxc,atomtype,cn,j,j)
@@ -292,13 +292,13 @@ class calcD3:
 
          C8jj = 3.0*C6jj*math.pow(r2r4[z],2.0)
          C10jj=49.0/40.0 * math.pow(C8jj,2.0)/C6jj
-         #print "  ",(j+1), atomtype[j], "   %.5f" % dum, "   %.5f" % cn[j] #, C6jj, C8jj, C10jj
-      #print "   #########################"
+      #    print("  ",(j+1), atomtype[j], "   %.5f" % dum, "   %.5f" % cn[j] , C6jj, C8jj, C10jj)
+      # print("   #########################")
 
       icomp = [0]*100000; cc6ab = [0]*100000; r2ab = [0]*100000; dmp = [0]*100000
 
       ## Compute and output the individual components of the D3 energy correction ##
-      #print "\n   Atoms  Types  C6            C8            E6              E8"
+      # print("\n   Atoms  Types  C6            C8            E6              E8")
       if damp == "zero":
          if verbose: print("\n   D3-dispersion correction with zero-damping:", end=' ')
          if s6 == 0.0 or rs6 == 0.0 or s8 == 0.0:
@@ -394,6 +394,7 @@ class calcD3:
 
                self.attractive_r6_vdw = self.attractive_r6_vdw + self.attractive_r6_term
                self.attractive_r8_vdw = self.attractive_r8_vdw + self.attractive_r8_term
+               print("   --- Total attractive interaction between atoms", (j+1), "and", (k+1),": Edisp =", "%.6f" % (self.attractive_r6_term + self.attractive_r8_term), "kcal/mol")
 
                jk=int(lin(k,j))
                icomp[jk] = 1
@@ -401,32 +402,36 @@ class calcD3:
                r2ab[jk] = dist**2
                dmp[jk] = (1.0/rr)**(1.0/3.0)
 
-      e63 = 0.0
-      for iat in range(0,natom):
-         for jat in range(0,natom):
-            ij=int(lin(jat,iat))
-            if icomp[ij]==1:
-               for kat in range(jat,natom):
-                  ik=int(lin(kat,iat))
-                  jk=int(lin(kat,jat))
+      if abc == True: 
+         e63 = 0.0
+         for iat in range(0,natom):
+            for jat in range(0,natom):
+               ij=int(lin(jat,iat))
+               if icomp[ij]==1:
+                  for kat in range(jat,natom):
+                     ik=int(lin(kat,iat))
+                     jk=int(lin(kat,jat))
 
-                  if kat>jat and jat>iat and icomp[ik] != 0 and icomp[jk] != 0:
-                     rav=(4.0/3.0)/(dmp[ik]*dmp[jk]*dmp[ij])
-                     tmp=1.0/( 1.0+6.0*rav**alpha6 )
+                     if kat>jat and jat>iat and icomp[ik] != 0 and icomp[jk] != 0:
+                        rav=(4.0/3.0)/(dmp[ik]*dmp[jk]*dmp[ij])
+                        tmp=1.0/( 1.0+6.0*rav**alpha6 )
 
-                     c9=cc6ab[ij]*cc6ab[ik]*cc6ab[jk]
-                     d2 = [0]*3
-                     d2[0]=r2ab[ij]
-                     d2[1]=r2ab[jk]
-                     d2[2]=r2ab[ik]
-                     t1 = (d2[0]+d2[1]-d2[2])/math.sqrt(d2[0]*d2[1])
-                     t2 = (d2[0]+d2[2]-d2[1])/math.sqrt(d2[0]*d2[2])
-                     t3 = (d2[2]+d2[1]-d2[0])/math.sqrt(d2[1]*d2[2])
-                     ang=0.375*t1*t2*t3+1.0
-                     e63=e63+tmp*c9*ang/(d2[0]*d2[1]*d2[2])**1.50
-
+                        c9=cc6ab[ij]*cc6ab[ik]*cc6ab[jk]
+                        d2 = [0]*3
+                        d2[0]=r2ab[ij]
+                        d2[1]=r2ab[jk]
+                        d2[2]=r2ab[ik]
+                        t1 = (d2[0]+d2[1]-d2[2])/math.sqrt(d2[0]*d2[1])
+                        t2 = (d2[0]+d2[2]-d2[1])/math.sqrt(d2[0]*d2[2])
+                        t3 = (d2[2]+d2[1]-d2[0])/math.sqrt(d2[1]*d2[2])
+                        ang=0.375*t1*t2*t3+1.0
+                        e63=e63+tmp*c9*ang/(d2[0]*d2[1]*d2[2])**1.50
+      else:
+         e63 = 0.0
+      
       self.repulsive_abc_term = s6 * e63 * autokcal
       self.repulsive_abc = self.repulsive_abc + self.repulsive_abc_term
+      print("   --- Total 3-body interaction: E3body =", "%.6f" % self.repulsive_abc_term, "kcal/mol")
 
 def main():
     parser = ArgumentParser()
@@ -500,4 +505,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
