@@ -9,7 +9,7 @@ with io.open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
   name='pydftd3',
-  packages=['dftd3'],
+  packages=['pydftd3'],
   version='1.0',
   description='Python version of Grimme\'s D3-dispersion correction for Gaussian input/output',
   long_description=long_description,
