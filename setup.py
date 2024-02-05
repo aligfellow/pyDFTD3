@@ -17,7 +17,6 @@ setup(
   author='Paton Research Group',
   author_email='robert.paton@colostate.edu',
   url='https://github.com/patonlab/pyDFTD3',
-  download_url='https://github.com/patonlab/pyDFTD3/archive/v1.0.zip',
   keywords=['gaussian', 'dispersion-energies', 'dampening-parameters', 'becke-johnson', 'grimme'],
   classifiers=[],
   install_requires=["cclib"],
