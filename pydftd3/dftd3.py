@@ -249,9 +249,9 @@ c6ab = copyc6(max_elem, maxc)
 ## The computation of the D3 dispersion correction
 class calcD3:
    def __init__(self, fileData, functional, damp='zero', s6=0.0, rs6=0.0, s8=0.0, a1=0.0, a2=0.0, abc=False, intermolecular=False, pairwise=False, verbose=True):
-      atom_nums = fileData.atom_nums
+      atom_nums = fileData.atomnos.tolist()
       atomtype = [periodictable[atno] for atno in atom_nums]
-      cartesians = fileData.cartesians
+      cartesians = fileData.atomcoords[-1].tolist()
       natom = len(atomtype)
 
       xco=[]; yco=[]; zco=[]
